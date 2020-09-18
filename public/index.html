@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>RealTime</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+  </head>
+  <body>
+    <header>
+      <h1>Realtime sockets for you!</h1>
+    </header>
+
+    <h2>Step 1: Add our JavaScript!</h2>
+    <pre> &lt;script src="https://realtime.songz.dev/socket.io/socket.io.js"&gt;&lt;/script&gt; </pre>
+
+    <h2>Step 2: start the connection!</h2>
+    <p>Notice the path! To avoid conflict with other users, make sure you specify a unique path.</p>
+    <p>Path must be alpha numeric and underscore(_) only</p>
+    <pre>
+const socket = io("https://realtime.songz.dev/your_custom_namespace");</pre>
+
+    <h2>Step 3: Listen to server default events</h2>
+    <p>There are a couple of events we send you to make your life easier</p>
+    <ul>
+      <li>To know when you are successfully connected to a socket, you can listen to <code>connect</code> event.</li>
+      <li>To know when another user has connected, you can listen to <code>connectionCreated</code> event.</li>
+      <li>To know when another user has disconnected, you can listen to <code>connectionDestroyed</code> event.</li>
+    </ul>
+    <pre>
+socket.on('connect', () => {
+  console.log('connected', socket.id)
+})
+socket.on('connectionCreated', (data) => {
+  console.log('received new connection', data.socketId)
+})
+socket.on('connectionDestroyed', (data) => {
+  console.log('user left', data.sockedId)
+}) </pre>
+
+    <h2>Step 4: Fire Events!</h2>
+    <p>Start sending events to other people in the socket. Make sure you pass an object as the second argument with <code>eventName</code> and <code>data</code>(option) properties</p>
+    <ul>
+      <li>Fire event to everyone: <code>all</code></li>
+      <li>Fire event to everyone (except you): <code>broadcast</code></li>
+    </ul>
+    <pre>
+socket.emit('all', {
+  eventName: 'announcement',
+  data: {name: 'c0d3 student'}
+})
+socket.emit('broadcast', {
+  eventName: 'foreveryoneelse',
+  data: {description: 'you can learn coding at c0d3.com'}
+}) </pre>
+
+    <h2>Step 5: Listen to app events!</h2>
+    <p>In the previous step you sent 2 events. To listen to those events:</p>
+    <pre>
+socket.on('announcement', (data) => {
+  console.log(data.name) // will be 'c0d3 student'
+})
+socket.emit('foreveryoneelse', (data) => {
+  console.log(data.description) // will be 'you can learn coding at c0d3.com'
+}) </pre>
+
+    <h2>Now you can have realtime events! </h2>
+    <h2>Good luck, have fun</h2>
+  </body>
+</html>
