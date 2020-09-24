@@ -7,13 +7,22 @@ app.use(express.static("public"));
 
 const workspaces = io.of(/^\/\w+$/);
 
+const allSockets = {};
+
 workspaces.on("connection", (socket) => {
   const workspace = socket.nsp;
+  allSockets[socket.id] = socket;
   socket.on("broadcast", ({ eventName, data }) => {
     socket.broadcast.emit(eventName, data);
   });
   socket.on("all", ({ eventName, data }) => {
     workspace.emit(eventName, data);
+  });
+
+  socket.on("direct", ({ socketId, eventName, data }) => {
+    const chosenSocket = allSockets[socketId];
+    if (!chosenSocket) return;
+    chosenSocket.emit(eventName, data);
   });
 
   socket.on("disconnect", () => {

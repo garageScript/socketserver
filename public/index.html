@@ -41,10 +41,16 @@ socket.on('connectionDestroyed', (data) => {
     <h2>Step 4: Fire Events!</h2>
     <p>Start sending events to other people in the socket. Make sure you pass an object as the second argument with <code>eventName</code> and <code>data</code>(option) properties</p>
     <ul>
+      <li>Fire event to a specific socket (except you): <code>direct</code></li>
       <li>Fire event to everyone: <code>all</code></li>
       <li>Fire event to everyone (except you): <code>broadcast</code></li>
     </ul>
     <pre>
+socket.emit('direct', {
+  socketId: socket.id, // this messages yourself
+  eventName: 'announcement',
+  data: {name: 'c0d3 student'}
+})
 socket.emit('all', {
   eventName: 'announcement',
   data: {name: 'c0d3 student'}
